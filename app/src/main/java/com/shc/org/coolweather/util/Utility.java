@@ -3,13 +3,17 @@ package com.shc.org.coolweather.util;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.shc.org.coolweather.db.City;
 import com.shc.org.coolweather.db.County;
 import com.shc.org.coolweather.db.Province;
+import com.shc.org.coolweather.gson.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import okhttp3.Response;
 
 /**
  * Created by 60291 on 8/12/2023.
@@ -80,13 +84,44 @@ public class Utility {
                     county.save();
                 }
                 return true;
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
         return  false;
     }
+
+    public static Weather handleWeatherRespnse(String response){
+        try {
+//            Log.v("responseWeather",response);
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray heWeather = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = heWeather.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent, Weather.class);// 使用 Gson 解析 JSON 数据并映射为 Weather 类型的对象
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static String handleBingPicResponse(String response){
+        String imgUrl = null;
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray images = jsonObject.getJSONArray("images");
+            for (int i = 0; i < images.length(); i++) {
+                JSONObject imagesJSONObject = images.getJSONObject(i);
+                String url = imagesJSONObject.getString("url");
+                imgUrl = "https://www.bing.com" + url;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return imgUrl;
+
+    }
+
+
 
 
 }
