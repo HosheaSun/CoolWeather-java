@@ -2,6 +2,7 @@ package com.shc.org.coolweather;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -165,7 +166,6 @@ public class WeatherActivity extends AppCompatActivity {
                             mWeatherId = weather.basic.weatherId;
                             showInfoWeather(weather);
                         }else{
-//                            Log.d("shibai",weatherUrl);
                             Toast.makeText(WeatherActivity.this, "获取天气信息失败",Toast.LENGTH_SHORT).show();
                         }
                         swipeRefresh.setRefreshing(false);
@@ -214,5 +214,4 @@ public class WeatherActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AutoUpdateService.class);
         startService(intent);
     }
-
 }
